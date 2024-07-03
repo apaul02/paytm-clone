@@ -6,6 +6,7 @@ export function P2pTransactions  ({
     transactions: {
         time: Date,
         amount: number,
+        type: string
     }[]
 }) {
     if (!transactions.length) {
@@ -17,17 +18,17 @@ export function P2pTransactions  ({
     }
     return <Card title="Recent Transactions">
         <div className="pt-2">
-            {transactions.map(t => <div className="flex justify-between">
+            {transactions.slice().reverse().slice(0,6).map(t => <div className="flex justify-between">
                 <div>
                     <div className="text-sm">
-                        Sent INR
+                        {t.type === "sent" ? "Sent INR" : "Received INR"}
                     </div>
                     <div className="text-slate-600 text-xs">
                         {t.time.toDateString()}
                     </div>
                 </div>
-                <div className="flex flex-col justify-center">
-                    - Rs {t.amount / 100}
+                <div className={`flex flex-col justify-center ${t.type === "sent" ? "text-red-500" : "text-green-500"} font-semibold`}>
+                {t.type === "sent" ? "-" : "+"} Rs {t.amount / 100}
                 </div>
 
             </div>)}
