@@ -1,12 +1,15 @@
 import React from "react";
 import { SidebarItem } from "../../components/SidebarItem";
+import { AppbarClient } from "../../components/AppbarClient";
 
 export default function layout({
   children,
 }: {
   children : React.ReactNode
 }): JSX.Element {
-  return<div className="flex"> 
+  return<div>
+    <AppbarClient />
+  <div className="flex"> 
     <div className="w-72 border-r border-slate-300 min-h-screen mr-4 pt-28">
       <div>
         <SidebarItem icon={<HomeIcon />} href={"/dashboard"} title={"Home"} />
@@ -15,7 +18,9 @@ export default function layout({
         <SidebarItem icon={<P2pIcon />} href={"/p2p"} title={"P2P Transfer"} />
       </div>
     </div>
+    
     {children}
+  </div>
   </div>
 }
 
