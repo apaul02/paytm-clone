@@ -7,7 +7,7 @@ import { P2pTransactions } from "../../../components/p2pTransactions";
 export default async function(){
   const session = await getServerSession(authOptions);
   if(!session?.user?.id){
-    redirect('/api/auth/signin')
+    redirect('/landing')
   }
   const allTxns = await sortTxns();
   return <div className="w-full">
