@@ -9,7 +9,9 @@ export async function signUp(name: string, number: string, password: string){
     }
   })
   if(existingUser){
-    console.log("Already exists")
+    return {
+      message : "User already exsists"
+    }
   }
   const hashedpassword = await bcrypt.hash(password, 10);
   try {

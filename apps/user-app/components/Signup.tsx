@@ -15,8 +15,16 @@ export const Signup = () => {
   const [error, setError] = useState("");
 
   const handleSignup = async () => {
+    if(!name || !password || !number){
+      setError("All fields are required");
+      return
+    }
     try {
       const user = await signUp(name, number, password);
+      if(user?.message){
+        setError(user.message);
+        return;
+      }
       console.log('User signed up:', user);
 
       const result = await signIn("credentials", {
@@ -28,6 +36,7 @@ export const Signup = () => {
       if (result?.error) {
         console.error('SignIn Error:', result.error);
         setError("Failed to SignIn after SignUp");
+        return;
       } else {
         console.log('SignIn Successful:', result);
         router.push('/dashboard');
@@ -35,6 +44,7 @@ export const Signup = () => {
     } catch (e) {
       console.error('SignUp Error:');
       setError("SignUp Failed Please try again later");
+      return;
     }
   }
 
@@ -47,7 +57,7 @@ export const Signup = () => {
             <TextInput onChange={(e) => setNumber(e)} label={"Number"} placeholder={"0123456789"} />
             <PasswordInput onChange={(e) => setPassword(e)} label={"Password"} placeholder={"*****"} />
           </div>
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-red-500 text-center font-semibold text-sm mt-2">{error}</p>}
           <div className="pt-4 flex justify-center">
             <Button onClick={handleSignup}>SignUp</Button>
           </div>

@@ -18,44 +18,67 @@ export const authOptions = {
         const existingUser = await db.user.findFirst({
           where: {
             number: credentials.phone
-          },
-        })
-
-        if(existingUser){
-          const passwordvalidation = await bcrypt.compare(credentials.password, existingUser.password)
-          if(passwordvalidation) {
-            return {
-              id: existingUser.id.toString(),
-              name: existingUser.name,
-              email: existingUser.email
-            }
           }
+        })
+        if(!existingUser){
           return null
         }
-
-        try {
-          const user = await db.user.create({
-            data: {
-              number: credentials.phone,
-              password: hashedpassword
-            }
-          })
-          const balance = await db.balance.create({
-            data: {
-              amount: 0,
-              userId: user.id,
-              locked: 0
-            }
-          })
+        const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
+        if(passwordValidation){
           return {
-            id: user.id.toString(),
-            name: user.name,
-            email: user.email
-          }
-        }catch(e){
-          console.log(e);
+            id: existingUser.id.toString(),
+            name: existingUser.name,
+            email: existingUser.email
+          };
+        }else{
+          return null;
         }
-        return null;  
+        // try{
+        // const hashedpassword = await bcrypt.hash(credentials.password, 10)
+        // const existingUser = await db.user.findFirst({
+        //   where: {
+        //     number: credentials.phone
+        //   },
+        // })
+
+        // if(existingUser){
+        //   const passwordvalidation = await bcrypt.compare(credentials.password, existingUser.password)
+        //   if(passwordvalidation) {
+        //     return {
+        //       id: existingUser.id.toString(),
+        //       name: existingUser.name,
+        //       email: existingUser.email
+        //     }
+        //   }
+        //   return null
+        // }}
+        // catch(e){
+        //   console.log(e);
+        // }
+
+        // try {
+        //   const user = await db.user.create({
+        //     data: {
+        //       number: credentials.phone,
+        //       password: hashedpassword
+        //     }
+        //   })
+        //   const balance = await db.balance.create({
+        //     data: {
+        //       amount: 0,
+        //       userId: user.id,
+        //       locked: 0
+        //     }
+        //   })
+        //   return {
+        //     id: user.id.toString(),
+        //     name: user.name,
+        //     email: user.email
+        //   }
+        // }catch(e){
+        //   console.log(e);
+        // }
+        // return null;  
       },
 
     })
